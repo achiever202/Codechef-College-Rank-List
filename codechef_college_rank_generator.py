@@ -2,7 +2,8 @@ import sys
 import urllib2
 from HTMLParser import HTMLParser
 from bs4 import BeautifulSoup
-import generate_rank_list	
+import generate_rank_list
+import generate_college_rank_list
 
 arguments = sys.argv[1:]
 
@@ -11,6 +12,6 @@ if len(arguments)>2:
 else:
 	generate_rank_list.generate_rank_list(arguments)
 
-	generate_college_rank_list("Indian Institute of Technology, Hyderabad")
+	generate_college_rank_list.generate_college_rank_list("Indian Institute of Technology, Hyderabad")
 		
 
