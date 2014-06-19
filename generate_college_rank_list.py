@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import check_user
 
 def generate_college_rank_list(college):
-	read_file = open("try.txt", "r");
+	read_file = open("rank_list.txt", "r");
 	write_file = open("college_rank_list.txt", "w")
 
 	for line in read_file:
