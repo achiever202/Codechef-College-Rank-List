@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 
 def generate_rank_list(arguments):
 
-	# Currently not using contest_name, testing for June14.
+	# Generating list for the contest.
 	contest_name = str(arguments[0])
 
 	# Open a file for writing the entire rank_list.
@@ -25,7 +25,7 @@ def generate_rank_list(arguments):
 
 	# While the last_score is more than 0, send request for the next 100 ranks.
 	while(last_score>0):
-		rank_list = urllib2.urlopen("http://www.codechef.com/ajax/ranks/contest/JUNE14/"+str(current_rank-1)+"/100").read()
+		rank_list = urllib2.urlopen("http://www.codechef.com/ajax/ranks/contest/"+contest_name+"/"+str(current_rank-1)+"/1000").read()
 
 		# Generate the tree for the html response.
 		soup = BeautifulSoup(rank_list)
