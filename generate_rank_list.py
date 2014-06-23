@@ -37,19 +37,27 @@ def generate_rank_list(arguments):
 		# for all the table rows in the request
 		for table_row in soup.find_all('tr'):
 
-
 			# for all the rows that have a rank i.e. not the table header and the rest of the rows.
 			if table_row.get('class') == ['row']:
 
 				# get the contents of the row.
 				table_row_content = table_row.contents;
 
-				# table_row_contents[5] stores the username of the participant, and table_row_content[7] stores the score.
-				line = str(current_rank) + " " + table_row_content[5].string + " " + table_row_content[7].string
-				print line
+				# finding all the columns (<td>) in the table row.
+				cols = table_row.find_all('td');
 
-				# writing the line to file.
-				f.write(line+"\n")
+				# finding the image field in the column, it has the country code.
+				image = cols[1].find_all('img');
+
+				# if the country code is India.
+				if image[0].get('title') == "IN":
+
+					# table_row_contents[5] stores the username of the participant, and table_row_content[7] stores the score.
+					line = str(current_rank) + " " + table_row_content[5].string + " " + table_row_content[7].string
+					print line
+
+					# writing the line to file.
+					f.write(line+"\n")
 
 				# updating the last_score and current_rank.
 				last_score = float(table_row_content[7].string)
