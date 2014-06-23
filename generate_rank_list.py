@@ -29,9 +29,14 @@ def generate_rank_list(arguments):
 
 		# Generate the tree for the html response.
 		soup = BeautifulSoup(rank_list)
+		
+		# if there are no more participants in the rank list.
+		if len(soup.find_all('tr')) == 2:
+		 	break;
 
 		# for all the table rows in the request
 		for table_row in soup.find_all('tr'):
+
 
 			# for all the rows that have a rank i.e. not the table header and the rest of the rows.
 			if table_row.get('class') == ['row']:
