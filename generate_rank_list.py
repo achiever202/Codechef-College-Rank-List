@@ -20,45 +20,39 @@ def generate_rank_list(arguments):
 	# This variable keeps track of the last_score in the data.
 	last_score = float(1)
 
-	# Current rank of the candidate.
-	current_rank = 1;
-
 	# While the last_score is more than 0, send request for the next 100 ranks.
 	while(last_score>0):
 		rank_list = urllib2.urlopen("http://www.codechef.com/ajax/ranks/contest/"+contest_name+"/"+str(current_rank-1)+"/1000").read()
 
 		# Generate the tree for the html response.
 		soup = BeautifulSoup(rank_list)
-		
-		# if there are no more participants in the rank list.
-		if len(soup.find_all('tr')) == 2:
-		 	break;
 
-		# for all the table rows in the request
-		for table_row in soup.find_all('tr'):
+		# Getting all the rows in the table.
+		rows = soup.find_all('tr')
 
-			# for all the rows that have a rank i.e. not the table header and the rest of the rows.
-			if table_row.get('class') == ['row']:
+		# If there are only two rows, i.e no participants, break.
+		if len(rows) == 2:
+			break;
 
-				# get the contents of the row.
-				table_row_content = table_row.contents;
+		# Looking at the participants in the current lot.
+		i = int(1)
+		while i < len(rows)-1:
 
-				# finding all the columns (<td>) in the table row.
-				cols = table_row.find_all('td');
+			# Getting all the columns in a row, i.e. data for a participant.
+			cols = rows[i].find_all('td')
 
-				# finding the image field in the column, it has the country code.
-				image = cols[1].find_all('img');
+			# Getting the image for the flag of the country.
+			image = cols[1].find_all('img')
 
-				# if the country code is India.
-				if image[0].get('title') == "IN":
+			# if the country code is India.
+			if image[0].get('title') == "IN":
+				# table_row_contents[5] stores the username of the participant, and table_row_content[7] stores the score.
+				line = str(cols[0].string) + " " + cols[2].string + " " + cols[3].string
+				print line
 
-					# table_row_contents[5] stores the username of the participant, and table_row_content[7] stores the score.
-					line = str(current_rank) + " " + table_row_content[5].string + " " + table_row_content[7].string
-					print line
+				# writing the line to file.
+				f.write(line+"\n")
 
-					# writing the line to file.
-					f.write(line+"\n")
-
-				# updating the last_score and current_rank.
-				last_score = float(table_row_content[7].string)
-				current_rank = current_rank + 1
+			# updating the last_score.
+			last_score = float(cols[3].string)
+			i = i+1
