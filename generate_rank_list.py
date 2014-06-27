@@ -6,19 +6,26 @@ It generates a file "rank_list.txt" which contains the rank, username, and score
 
 import sys
 import urllib2
+
 from HTMLParser import HTMLParser
 from bs4 import BeautifulSoup
 
+import class_participant
+
 def generate_rank_list(arguments):
 
-	# Generating list for the contest.
+	# Generating list for the current contest.
 	contest_name = str(arguments[0])
 
-	# Open a file for writing the entire rank_list.
-	f = open("rank_list.txt", "w")
+	# list for the participants from India.
+	participants = list()
+	pos = 0
 
 	# This variable keeps track of the last_score in the data.
 	last_score = float(1)
+
+	# keeping track of current rank (unique).
+	current_rank = 1
 
 	# While the last_score is more than 0, send request for the next 100 ranks.
 	while(last_score>0):
@@ -46,13 +53,19 @@ def generate_rank_list(arguments):
 
 			# if the country code is India.
 			if image[0].get('title') == "IN":
-				# table_row_contents[5] stores the username of the participant, and table_row_content[7] stores the score.
-				line = str(cols[0].string) + " " + cols[2].string + " " + cols[3].string
+
+				# cols[2] stores the username of the participant, and cols[3] stores the score.
+				participants.append(class_participant.Participant(cols[0].string, cols[2].string, cols[3].string)) 
+
+				line = participants[pos].rank + " " + participants[pos].username + " " + participants[pos].score;
 				print line
 
-				# writing the line to file.
-				f.write(line+"\n")
+				pos = pos+1
 
-			# updating the last_score.
+			# updating the last_score and current_rank
 			last_score = float(cols[3].string)
+			current_rank = current_rank + 1
+
 			i = i+1
+
+	return participants
