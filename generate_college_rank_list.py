@@ -13,6 +13,6 @@ def generate_college_rank_list(rank_list, college):
 		print participant.rank + ". " + participant.username
 		if(user_name!=None):
 			print "****************"+user_name+"******************"
-			write_file.write(user_info[0] + " " + user_name + " " + user_info[2] + "\n")
+			write_file.write(participant.rank + " " + user_name + " " + participant.score + "\n")
 		
 
